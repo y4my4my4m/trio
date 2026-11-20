@@ -1,0 +1,11 @@
+# ROM PCs replaced by hand-written C in the recompiled build (docs/RECOMP.md).
+# BB:AAAA function
+00:BCBC ovr_WideCamBG1
+00:BCF3 ovr_WideCamBG2
+00:DE87 ovr_WideSpawnColumns
+00:EA42 ovr_OptCursor
+00:EA8A ovr_OptDrawOld
+00:EAA7 ovr_OptDrawNew
+00:EACB ovr_OptDispatch
+02:D636 ovr_G3OnScreen
+04:AFD3 ovr_G3SwitchShots

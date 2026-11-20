@@ -1,0 +1,11 @@
+# ROM PCs replaced by hand-written C in the recompiled build. BB:AAAA function
+00:B7EA ovr_G2WideCamBG1
+00:B821 ovr_G2WideCamBG2
+00:DC9D ovr_G2WideSpawnColumns
+00:EACB ovr_G2OptCursor
+00:EB13 ovr_G2OptDrawOld
+00:EB30 ovr_G2OptDrawNew
+00:EB54 ovr_G2OptDispatch
+00:D859 ovr_G2OnScreen
+08:BEDC ovr_G2SwitchShots
+08:C5C5 ovr_G2UppercutHp

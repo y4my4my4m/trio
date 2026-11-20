@@ -1,0 +1,11 @@
+# ROM PCs replaced by hand-written C in the recompiled build. BB:AAAA function
+80:BA87 ovr_G1WideCamBG1
+80:BABE ovr_G1WideCamBG2
+80:DCA5 ovr_G1WideSpawnColumns
+80:EAB9 ovr_G1OptCursor
+80:EAFE ovr_G1OptDrawOld
+80:EB1B ovr_G1OptDrawNew
+80:EB3F ovr_G1OptDispatch
+82:80B4 ovr_G1OnScreen
+81:99CE ovr_G1SwitchShots
+81:A0EC ovr_G1FireballHp

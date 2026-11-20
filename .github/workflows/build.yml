@@ -1,0 +1,33 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: deps (linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev
+      - name: deps (macos)
+        if: runner.os == 'macOS'
+        run: brew install sdl2
+      - name: deps (windows)
+        if: runner.os == 'Windows'
+        run: vcpkg install sdl2:x64-windows
+      #No ROM in CI: interpreter-only build plus the unit tests.
+      - name: configure
+        shell: bash
+        run: |
+          extra=""
+          if [ "$RUNNER_OS" = "Windows" ]; then extra="-DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"; fi
+          cmake -S . -B build -DTRIO_RECOMP=OFF -DCMAKE_BUILD_TYPE=Release $extra
+      - name: build
+        run: cmake --build build --config Release -j 4
+      - name: test
+        run: ctest --test-dir build -C Release --output-on-failure

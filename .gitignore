@@ -1,0 +1,22 @@
+# Copyrighted game data: never commit.
+rom/*
+!rom/README.md
+*.sfc
+*.smc
+*.state
+*.spc
+
+# ROM-derived generated output.
+build*/
+src/game/gen/
+
+# Runtime artifacts.
+*.ppm
+*.wav
+screenshot.*
+__pycache__/
+*.pyc
+
+# Runtime files.
+*.ini
+saves/

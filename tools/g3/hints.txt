@@ -1,0 +1,2 @@
+# Hints for tools/disasm.py. Format: see the disasm.py module docstring.
+# Most entry points come from the coverage trace (tools/coverage.txt).

@@ -1,0 +1,1 @@
+# Hints for tools/disasm.py (game 1). Format: see the disasm.py module docstring.
