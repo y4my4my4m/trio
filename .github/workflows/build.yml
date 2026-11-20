@@ -1,6 +1,14 @@
 name: build
 
-on: [push, pull_request]
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -17,17 +25,46 @@ jobs:
       - name: deps (macos)
         if: runner.os == 'macOS'
         run: brew install sdl2
+      #Static SDL2 and C runtime: trio.exe needs no DLL or redistributable.
       - name: deps (windows)
         if: runner.os == 'Windows'
-        run: vcpkg install sdl2:x64-windows
+        run: vcpkg install sdl2:x64-windows-static
       #No ROM in CI: interpreter-only build plus the unit tests.
       - name: configure
         shell: bash
         run: |
           extra=""
-          if [ "$RUNNER_OS" = "Windows" ]; then extra="-DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"; fi
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            extra="-DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
+            extra="$extra -DVCPKG_TARGET_TRIPLET=x64-windows-static -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded"
+          fi
           cmake -S . -B build -DTRIO_RECOMP=OFF -DCMAKE_BUILD_TYPE=Release $extra
       - name: build
         run: cmake --build build --config Release -j 4
       - name: test
         run: ctest --test-dir build -C Release --output-on-failure
+      #The interpreter-only build holds no game code, so it can be distributed.
+      - name: package (windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $d = "trio-windows-x64"
+          New-Item -ItemType Directory -Force "$d/rom", "$d/LICENSES" | Out-Null
+          Copy-Item build/Release/trio.exe, dist/windows/README.txt, README.md, LICENSE $d
+          Copy-Item rom/README.md "$d/rom/"
+          Copy-Item LICENSES/* "$d/LICENSES/"
+          Copy-Item third_party/imgui/LICENSE.txt "$d/LICENSES/imgui.txt"
+          Copy-Item "$env:VCPKG_INSTALLATION_ROOT/installed/x64-windows-static/share/sdl2/copyright" "$d/LICENSES/SDL2.txt"
+          Compress-Archive -Path $d -DestinationPath "$d.zip"
+      - name: artifact (windows)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: trio-windows-x64
+          path: trio-windows-x64.zip
+      - name: attach to release (windows)
+        if: runner.os == 'Windows' && github.event_name == 'release'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ github.event.release.tag_name }}" trio-windows-x64.zip --clobber -R "${{ github.repository }}"

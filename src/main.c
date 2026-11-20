@@ -8,6 +8,8 @@
 #include <io.h>
 #define strcasecmp _stricmp
 #define chdir _chdir
+//kernel32; prototype instead of <windows.h>, whose macros leak into this file.
+__declspec(dllimport) int __stdcall AttachConsole(unsigned long pid);
 #else
 #include <dirent.h>
 #include <strings.h>
@@ -1051,6 +1053,14 @@ static int run_window(const Options *o) {
 }
 
 int main(int argc, char **argv) {
+#ifdef _WIN32
+  //GUI subsystem: no console of its own. Started from a console, output
+  //that is not redirected goes to that console.
+  if ((_fileno(stdout) < 0 || _fileno(stderr) < 0) && AttachConsole((unsigned long)-1)) {
+    if (_fileno(stdout) < 0) freopen("CONOUT$", "w", stdout);
+    if (_fileno(stderr) < 0) freopen("CONOUT$", "w", stderr);
+  }
+#endif
   Options o;
   if (!parse(argc, argv, &o)) return 2;
   //A ROM named on the command line is relative to where the user is.
@@ -1071,6 +1081,11 @@ int main(int argc, char **argv) {
   }
   if (!start && !found) {
     fprintf(stderr, "no ROM: put a supported ROM in rom/ (any file name, .sfc or .smc; rom/README.md)\n");
+    if (!o.headless)
+      SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "trio",
+        "No supported ROM found.\n\n"
+        "Copy your ROM images into the rom folder (any file name, .sfc or .smc) "
+        "and start trio again. rom/README.md lists the supported versions.", NULL);
     return 1;
   }
   g_recomp = !o.interp && !o.coverage_path && rt_enabled_by_env();

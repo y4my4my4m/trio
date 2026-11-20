@@ -15,7 +15,8 @@
   above or below (or at a stage start) appears on the first step sideways,
   not at once. Rooms with a locked camera show level data beyond the room.
 - The recompiled build is tested on Linux. CI builds the interpreter-only
-  configuration on Linux, macOS and Windows.
+  configuration on Linux, macOS and Windows; the prebuilt Windows download
+  is that configuration.
 - Only the USA ROMs are supported.
 
 ## Next
@@ -23,7 +24,7 @@
 1. Releases
    - Overrides (widescreen, PORT OPTIONS, battle mode) in the interpreter
      build, so a prebuilt binary has every feature without recompiling.
-   - Prebuilt binaries for Linux, macOS and Windows from CI.
+   - Prebuilt binaries for Linux and macOS from CI, as for Windows.
    - The recompiled build in CI, with a ROM supplied to the runner.
 2. Single player
    - Full playthroughs of the three games in widescreen, every scripted

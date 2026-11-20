@@ -18,6 +18,12 @@ and no game data is included: you need your own dumps of the cartridges.
 | Game select screen | one program for the three games |
 | Battle mode | 2-4 players (people or CPU) fighting as the hero, Blade and others, in arenas from the three games |
 
+Windows: the [releases page](https://github.com/y4my4my4m/trio/releases)
+has a prebuilt `trio-windows-x64.zip`. Unzip it, copy your ROMs into
+`rom\` and run `trio.exe`. It runs the games in the interpreter, without
+widescreen, the in-game PORT OPTIONS page and battle mode; the build below,
+made with your ROMs, has every feature.
+
 ## 1. Requirements
 
 - CMake 3.16 or newer

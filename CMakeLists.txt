@@ -8,6 +8,11 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 find_package(SDL2 REQUIRED)
+#A static SDL2 (vcpkg x64-windows-static) exports SDL2::SDL2-static only.
+if(NOT TARGET SDL2::SDL2 AND TARGET SDL2::SDL2-static)
+  add_library(SDL2::SDL2 INTERFACE IMPORTED)
+  target_link_libraries(SDL2::SDL2 INTERFACE SDL2::SDL2-static)
+endif()
 #Static libraries are also linked into the research library (tools/snespy.c).
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
@@ -146,7 +151,8 @@ add_library(trioport STATIC src/port/enhance.c src/port/rewind.c
 target_include_directories(trioport PUBLIC src)
 target_link_libraries(trioport PUBLIC triogame snes imgui SDL2::SDL2)
 
-add_executable(trio src/main.c)
+#WIN32: GUI subsystem on Windows (no console window); SDL2main supplies WinMain.
+add_executable(trio WIN32 src/main.c)
 target_link_libraries(trio PRIVATE trioport trioarena triogame trioscript snes SDL2::SDL2)
 if(TARGET SDL2::SDL2main)
   target_link_libraries(trio PRIVATE SDL2::SDL2main)
