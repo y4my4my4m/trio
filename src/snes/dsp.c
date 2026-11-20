@@ -1,12 +1,25 @@
+//Sample-level S-DSP: a C port of SPC_DSP.cpp from blargg's snes_spc 0.9.0
+//(http://www.slack.net/~ant/). Per-voice ordering and arithmetic follow its
+//voice_V2..V5, echo_22..30 and misc_27..30, collapsed to one step per
+//output frame.
+//
+//Copyright (C) 2007 Shay Green.
+//Modified 2026 by y4my4my4m: ported to C, one step per output frame, state
+//in Apu.dsp_opaque.
+//
+//This file is free software; you can redistribute it and/or modify it under
+//the terms of the GNU Lesser General Public License as published by the Free
+//Software Foundation; either version 2.1 of the License, or (at your option)
+//any later version. It is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
+//General Public License for more details: LICENSES/LGPL-2.1-or-later.txt.
+
 #include "dsp.h"
 #include "apu.h"
 
 #include <stddef.h>
 #include <string.h>
-
-//Sample-level S-DSP. Per-voice ordering and arithmetic follow blargg's
-//SPC_DSP (voice_V2..V5, echo_22..30, misc_27..30) collapsed to one step
-//per output frame.
 
 //Per-voice register offsets (voice n at n*0x10).
 enum { V_VOLL, V_VOLR, V_PITCHL, V_PITCHH, V_SRCN, V_ADSR1, V_ADSR2, V_GAIN,

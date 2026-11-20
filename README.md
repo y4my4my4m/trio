@@ -37,11 +37,11 @@ and no game data is included: you need your own dumps of the cartridges.
 ## 2. Get the code and add your ROMs
 
 ```bash
-git clone <repository URL>
+git clone https://github.com/y4my4my4m/trio.git
 ```
 
 ```bash
-cd <folder>
+cd trio
 ```
 
 Copy your ROMs into the `rom/` folder before building. Any file name works
@@ -208,8 +208,10 @@ overrides the setting, `--coverage FILE` records executed code addresses.
 
 ## License
 
-The port's own code is under the MIT license (`LICENSE`). Dear ImGui
-(`third_party/imgui`) is under the MIT license too
+The port's own code is under the MIT license (`LICENSE`), except
+`src/snes/dsp.c`: a C port of the S-DSP from blargg's snes_spc 0.9.0, under
+the GNU LGPL 2.1 or later (`LICENSES/LGPL-2.1-or-later.txt`). Dear ImGui
+(`third_party/imgui`) is under the MIT license
 (`third_party/imgui/LICENSE.txt`).
 
 The license covers this repository only. It contains no code or data from

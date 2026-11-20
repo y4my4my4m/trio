@@ -17,7 +17,8 @@ src/snes/           platform layer
   cpu.c cpu_ops.h   65C816 interpreter; cpu_ops.h is shared with the recompiled code
   ppu.c             scanline PPU renderer
   apu.c dsp.c       SPC700 + S-DSP (the chip's boot ROM is not included: its
-                    transfer protocol is run in C, apu.c ipl_step)
+                    transfer protocol is run in C, apu.c ipl_step); dsp.c is
+                    ported from blargg's snes_spc, LGPL 2.1 or later
 src/game/           recompiled code runtime (recomp_rt.c, one dispatch table per game),
                     widescreen overrides (widescreen.c for G3, g1_ws.c, g2_ws.c)
                     and ROM constants (ws_rom.c), in-game PORT OPTIONS (port_menu.c);
